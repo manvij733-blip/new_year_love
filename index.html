@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Love 🤍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  height:100vh;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#cfe9ff,#ffe6f2,#ffffff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  text-align:center;
+}
+
+.section{
+  position:absolute;
+  opacity:0;
+  transform:scale(0.95);
+  transition:opacity 1.2s ease, transform 1.2s ease;
+}
+
+.section.active{
+  opacity:1;
+  transform:scale(1);
+}
+
+button{
+  padding:14px 30px;
+  font-size:1.1rem;
+  border:none;
+  border-radius:30px;
+  background:#ff6fae;
+  color:white;
+  cursor:pointer;
+  margin-top:25px;
+}
+
+img{
+  max-width:230px;
+  border-radius:20px;
+  margin-bottom:15px;
+}
+
+/* floating */
+.float{
+  position:absolute;
+  font-size:1.6rem;
+  animation:floatUp 7s linear infinite;
+  opacity:.6;
+}
+@keyframes floatUp{
+  0%{transform:translateY(110vh)}
+  100%{transform:translateY(-10vh)}
+}
+
+/* cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,140px);
+  gap:20px;
+  justify-content:center;
+}
+
+.card{
+  width:140px;
+  height:170px;
+  perspective:1000px;
+  cursor:pointer;
+}
+
+.card-inner{
+  width:100%;
+  height:100%;
+  transition:transform .7s;
+  transform-style:preserve-3d;
+}
+
+.card.flipped .card-inner{
+  transform:rotateY(180deg);
+}
+
+.card-front,.card-back{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  backface-visibility:hidden;
+}
+
+.card-front{
+  background:#ff9fcf;
+  color:white;
+  font-size:1.4rem;
+}
+
+.card-back{
+  background:white;
+  color:#ff5fa2;
+  transform:rotateY(180deg);
+  font-weight:bold;
+}
+
+/* letter */
+.letter{
+  max-width:340px;
+  background:white;
+  padding:22px;
+  border-radius:22px;
+  line-height:1.6;
+  font-size:1rem;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="audio/perfect.mp3" loop></audio>
+
+<div id="s0" class="section active">
+  <h1>✨ Hey love ✨</h1>
+  <button onclick="go(1)">Tap 🤍</button>
+</div>
+
+<div id="s1" class="section">
+  <h1 style="font-size:2.8rem;">🎉 HAPPY NEW YEAR 🎉</h1>
+  <button onclick="go(2)">Next ✨</button>
+</div>
+
+<div id="s2" class="section">
+  <img src="images/kitty.jpg">
+  <button onclick="go(3)">Click me 🐾</button>
+</div>
+
+<div id="s3" class="section">
+  <h2>Tap the cards 💗</h2>
+  <div class="cards">
+    <div class="card" onclick="flip(this)">
+      <div class="card-inner">
+        <div class="card-front">💖</div>
+        <div class="card-back">You are the best boyfriend in the world</div>
+      </div>
+    </div>
+    <div class="card" onclick="flip(this)">
+      <div class="card-inner">
+        <div class="card-front">💘</div>
+        <div class="card-back">You are the best boyfriend in the world</div>
+      </div>
+    </div>
+    <div class="card" onclick="flip(this)">
+      <div class="card-inner">
+        <div class="card-front">💗</div>
+        <div class="card-back">You are the best boyfriend in the world</div>
+      </div>
+    </div>
+    <div class="card" onclick="flip(this)">
+      <div class="card-inner">
+        <div class="card-front">🤍</div>
+        <div class="card-back">You are the best boyfriend in the world</div>
+      </div>
+    </div>
+  </div>
+  <button onclick="go(4)">Next 💞</button>
+</div>
+
+<div id="s4" class="section">
+  <img src="images/couple.jpg">
+  <h3>A letter for someone special 💌</h3>
+  <button onclick="go(5)">Open ✨</button>
+</div>
+
+<div id="s5" class="section">
+  <div class="letter" id="letterBox"></div>
+  <button onclick="go(6)">Last 🤍</button>
+</div>
+
+<div id="s6" class="section">
+  <img src="images/kiss.gif">
+  <h2>
+    FALLING IN LOVE WITH YOU IS THE MOST BEAUTIFUL EXPERIENCE IN MY LIFE 🤍<br><br>
+    I LOVE TO BE YOURS — NOW AND FOREVER.<br><br>
+    BECAUSE THIS BAUNI BADMOSH LOVES YOU THE MOSTTTTTTTT 💖
+  </h2>
+</div>
+
+<script>
+const sections=document.querySelectorAll('.section');
+let current=0;
+
+function go(n){
+  sections[current].classList.remove('active');
+  current=n;
+  sections[current].classList.add('active');
+
+  if(current===1) document.getElementById("music").play();
+  if(current===5) typeLetter();
+}
+
+function flip(c){c.classList.toggle("flipped");}
+
+const symbols=["🤍","💋"];
+for(let i=0;i<40;i++){
+  const f=document.createElement("div");
+  f.className="float";
+  f.innerText=symbols[Math.floor(Math.random()*symbols.length)];
+  f.style.left=Math.random()*100+"vw";
+  f.style.animationDuration=5+Math.random()*5+"s";
+  document.body.appendChild(f);
+}
+
+const lines=[
+"Hey love,",
+"Thank you.",
+"Even after being blamed.",
+"Even after so many misunderstandings.",
+"We stayed.",
+"We loved.",
+"And we will keep loving forever.",
+"",
+"From one year to a whole lifetime.",
+"Every moment, every version of us.",
+"",
+"Thank you for listening to me.",
+"For being my therapist.",
+"My safe place.",
+"My everything.",
+"",
+"For not judging me.",
+"For all my bakchodis and kand.",
+"Especially the things about my father… I’m sorry.",
+"",
+"I know I was selfish sometimes.",
+"If I wasn’t there for you.",
+"If I made you insecure.",
+"BUT I NEVER WANTED THAT.",
+"I swear. Really.",
+"",
+"Thank you for loving me unconditionally.",
+"For making me come out of my insecurities.",
+"For making me feel beautiful.",
+"",
+"Nahi toh main khud ko insaan kam,",
+"aadha jaadu aur mogli zyada samajhti thi.",
+"",
+"I’m not letting you go.",
+"Not in 2026.",
+"Not ever.",
+"",
+"Living with you is a dream come true.",
+"And I never want to wake up from it."
+];
+
+let i=0;
+function typeLetter(){
+  const box=document.getElementById("letterBox");
+  if(i<lines.length){
+    box.innerHTML+=lines[i]+"<br>";
+    i++;
+    setTimeout(typeLetter,1200);
+  }
+}
+</script>
+
+</body>
+</html>
